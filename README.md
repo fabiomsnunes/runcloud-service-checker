@@ -4,7 +4,7 @@
 
 ## Overview
 
-The RunCloud Service Checker is a Python script that checks the status of services on RunCloud servers and restarts them if necessary. It is designed to help you monitor and manage your server's services efficiently.
+The RunCloud Service Checker is a Python script designed to prevent service interruptions on RunCloud servers caused by out-of-memory (OOM) events. This script monitors the status of server services and automatically restarts them if necessary.
 
 ### Features
 
