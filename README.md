@@ -97,6 +97,26 @@ You can also use the `--verbose` flag to display detailed output:
 python runcloud-service-checker.py --verbose
 ```
 
+### Running as a Cron Job
+
+To automate the service checking process, you can set up a cron job to run the script at specified intervals. Here's an example of how to do it:
+
+1. Open your crontab configuration for editing:
+
+```
+crontab -e
+```
+
+2. Add a new line to schedule the script to run at your preferred frequency. For example, to run the script every 5 minutes, add the following line:
+
+```
+*/5 * * * * /usr/bin/python3 /path/to/runcloud-service-checker/check.py
+```
+
+Make sure to replace `/usr/bin/python3` with the path to your Python 3 interpreter, and `/path/to/runcloud-service-checker` with the actual path to the script's directory.
+
+3. Save and exit the text editor. The script will now run automatically according to your cron job schedule.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
