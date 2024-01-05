@@ -7,7 +7,7 @@ GitHub: https://github.com/fabiomsnunes/runcloud-service-checker
 Description:
 This script checks the status of services on your RunCloud servers and restarts them if necessary.
 """
-
+import time
 import requests
 import base64
 import sys
@@ -29,7 +29,6 @@ CONFIG = {
 EMAIL_SETTINGS = {
     'email_notifications': True,  # Set to False to disable email notifications
     'email_receiver': 'your_email@example.com',  # Set your email address here
-
     'from_name': 'Runcloud service checker',
     'from_email': 'noreply@example.com',
     'smtp_host': 'smtp.example.com',
@@ -75,12 +74,10 @@ def send_notification(server_id: str, server_name: str, service_name: str) -> No
     smtp_server.sendmail(EMAIL_SETTINGS['smtp_username'], EMAIL_SETTINGS['email_receiver'], msg.as_string())
     smtp_server.quit()
 
-
-def fetch_data(url):
-    """Fetches data from the API."""
-    # Send GET request to the API endpoint
-    response = requests.get(url, headers=HEADERS)
-
+def fetch_data(url, page=1, per_page=40):
+    """Fetches data from the API with pagination."""
+    paginated_url = f"{url}?page={page}&perPage={per_page}"
+    response = requests.get(paginated_url, headers=HEADERS)
     # Check if the request was successful
     if response.status_code == 200:
         # Return the fetched data as a list of dictionaries
@@ -175,21 +172,26 @@ def check_services(servers):
                     if VERBOSE_MODE:
                         print(f"-- ✅ {service_name} on {server_name}")
 
-
+                    # Sleep for 5 seconds to avoid rate limiting
+                    time.sleep(1.3)
 def main():
-    """ The main function to fetch servers data and check services. """
     global VERBOSE_MODE
-    # Construct the servers URL using the base URL from the configuration
-    servers_url = f"{CONFIG['base_url']}/servers"
+    servers = []
+    page = 1
+    more_data = True
 
-    # Fetch the data from the servers URL and get the 'data' field
-    servers = fetch_data(servers_url).get('data', [])
-
-    # Check if the '--verbose' argument is provided to enable verbose mode
     if '--verbose' in sys.argv:
-        VERBOSE_MODE = True  # Set VERBOSE_MODE to True if '--verbose' is provided
+        VERBOSE_MODE = True
 
-    # Check the services for each server
+    while more_data:
+        response = fetch_data(f"{CONFIG['base_url']}/servers", page)
+        data = response.get('data', [])
+        servers.extend(data)
+
+        # Check if there are more pages of data
+        more_data = len(data) == 40  # If we got 40 items, there might be more
+        page += 1
+
     check_services(servers)
 
 if __name__ == "__main__":
