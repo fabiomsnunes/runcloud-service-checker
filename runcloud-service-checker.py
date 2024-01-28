@@ -172,8 +172,8 @@ def check_services(servers):
                     if VERBOSE_MODE:
                         print(f"-- ✅ {service_name} on {server_name}")
 
-                    # Sleep for 5 seconds to avoid rate limiting
-                    time.sleep(1.3)
+                    # Sleep for 1.6 seconds (60 sec / 40 servers per page + 0.1 for buffer) to avoid rate limiting
+                    time.sleep(1.6)
 def main():
     global VERBOSE_MODE
     servers = []
