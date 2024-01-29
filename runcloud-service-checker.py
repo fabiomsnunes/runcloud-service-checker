@@ -14,27 +14,32 @@ import sys
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 # Configuration options
 CONFIG = {
-    'base_url': 'https://manage.runcloud.io/api/v2',
-    'api_key': 'YOUR_API_KEY',  # Replace with your API key
-    'api_secret': 'YOUR_API_SECRET',  # Replace with your API secret
-    'services_to_check': ['lsws-rc', 'mysql', 'redis-server'],  # List of services to check, use the realName field. See available here: https://runcloud.io/docs/api/services
-    'excluded_services': {  # List of servers and services to exclude
-        # 12345: ['ALL_SERVICES'], # Example to exclude all services on server 12345
-        # 56789: ['redis'], # Example to exclude redis on server 56789
+    'base_url': os.getenv('BASE_URL'),
+    'api_key': os.getenv('API_KEY'),
+    'api_secret': os.getenv('API_SECRET'),
+    'services_to_check': os.getenv('SERVICES_TO_CHECK').split(','),
+    'excluded_services': {
+        int(k): v.split(',') for k, v in (service.split(':') for service in os.getenv('EXCLUDED_SERVICES').split(',') if service)
     },
 }
+
 EMAIL_SETTINGS = {
-    'email_notifications': True,  # Set to False to disable email notifications
-    'email_receiver': 'your_email@example.com',  # Set your email address here
-    'from_name': 'Runcloud service checker',
-    'from_email': 'noreply@example.com',
-    'smtp_host': 'smtp.example.com',
-    'smtp_port': 587,
-    'smtp_username': 'your_smtp_username',
-    'smtp_password': 'your_smtp_password',
+    'email_notifications': os.getenv('EMAIL_NOTIFICATIONS') == 'True',
+    'email_receiver': os.getenv('EMAIL_RECEIVER'),
+    'from_name': os.getenv('FROM_NAME'),
+    'from_email': os.getenv('FROM_EMAIL'),
+    'smtp_host': os.getenv('SMTP_HOST'),
+    'smtp_port': int(os.getenv('SMTP_PORT')),
+    'smtp_username': os.getenv('SMTP_USERNAME'),
+    'smtp_password': os.getenv('SMTP_PASSWORD'),
 }
 
 # Global variable for verbosity, set to False by default

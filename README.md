@@ -18,31 +18,16 @@ These instructions will help you get the project up and running on your local ma
 
 ### Prerequisites
 
-Before you begin, make sure you have Python 3.x installed. If you don't have it installed, you can follow these instructions to install Python 3 on your specific platform:
+Before you begin, make sure you have Python 3.x installed along with the `python-dotenv` package, which is required for loading configuration settings from the `.env` file. If you don't have Python and `python-dotenv` installed, follow the instructions below:
 
-- **macOS**:
-  - Open the terminal and run the following commands to update your package list and install Python 3:
+- **Python 3 Installation:**
+  - Instructions for installing Python 3 vary by platform. Please refer to the Python 3 installation guide for your operating system.
+
+- **Installing python-dotenv:**
+  - Once Python 3 is installed, open your terminal or command prompt and install the `python-dotenv` package using pip:
     ```bash
-    brew install python3
+    pip install python-dotenv
     ```
-  - You can verify the installation by running: `python3 --version`.
-
-- **Linux** (Ubuntu/Debian):
-  - Open the terminal and run the following commands to update your package list and install Python 3:
-    ```bash
-    sudo apt update
-    sudo apt install python3
-    ```
-  - You can verify the installation by running: `python3 --version`.
-
-- **Windows**:
-  - Visit the official Python website: [Download Python](https://www.python.org/downloads/windows/).
-  - Download the latest Python 3.x installer.
-  - Run the installer, and during installation, make sure to check the option that says "Add Python X.X to PATH" (X.X represents the Python version).
-  - After installation, you can open Command Prompt or PowerShell and verify Python 3 installation by running: `python --version` or `python3 --version`.
-
-Please note that the exact commands and steps may vary depending on your Linux distribution or Windows version. Once you have Python 3 installed, you can proceed with setting up and running the RunCloud Service Checker as described in the installation and usage sections above.
-
 
 ### Installation
 
@@ -60,28 +45,16 @@ cd runcloud-service-checker
 
 ### Configuration
 
-Before running the script, configure the `CONFIG` dictionary in the `runcloud-service-checker.py` script:
+To set up the project, you will start by renaming the `.env.example` file to `.env`. Inside this `.env` file, you'll find placeholders for various settings that need to be configured:
 
-```python
-CONFIG = {
-    'base_url': 'https://manage.runcloud.io/api/v2',
-    'api_key': 'YOUR_API_KEY',
-    'api_secret': 'YOUR_API_SECRET',
-    'services_to_check': ['lsws-rc', 'mysql', 'redis-server'],
-    'excluded_services': {
-        # Define your exclusions here
-    },
-    'email_notifications': True,
-    'email_receiver': 'your.email@example.com',
-    'smtp_host': 'YOUR_SMTP_HOST',
-    'smtp_port': 587,
-    'smtp_username': 'YOUR_SMTP_USERNAME',
-    'smtp_password': 'YOUR_SMTP_PASSWORD',
-    # ... (other configuration options)
-}
-```
+- **RunCloud API Secrets**: These are your personal credentials for accessing the [RunCloud API](https://runcloud.io/docs/api), including your API Key (`API_KEY`) and API Secret (`API_SECRET`). You will need to replace the placeholders with your actual RunCloud API credentials.
 
-Make sure to set the SMTP settings for email notifications.
+- **Services to Check**: Specify which services the script should monitor on your RunCloud servers. This is done by listing the service names under `SERVICES_TO_CHECK`, separated by commas.
+
+- **SMTP Details**: For the script to send email notifications, you must provide SMTP server details, including the host (`SMTP_HOST`), port (`SMTP_PORT`), username (`SMTP_USERNAME`), and password (`SMTP_PASSWORD`).
+
+Ensure that you carefully replace the placeholder values with your actual configuration details to ensure the script functions correctly.
+
 
 ### Usage
 
