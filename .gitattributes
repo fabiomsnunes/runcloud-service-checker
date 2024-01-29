@@ -1,6 +1,6 @@
-# Exclude the .git folder
-/.git export-ignore
+#
+# Exclude files from exporting
+#
 
-# Exclude license and readme files
-/LICENSE export-ignore
-/README.md export-ignore
+.gitattributes  export-ignore
+.gitignore      export-ignore
